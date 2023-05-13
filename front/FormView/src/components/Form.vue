@@ -56,11 +56,11 @@ export default{
     <label for="birth" class="form-label birth">Fecha de nacimiento: </label>
     <div class="mb-3 labels">
       <label for="day" class="form-label regLabel">Día:</label>
-      <input type="number" id="day" aria="none" class="form-label reg" v-model="day">
+      <input type="number" id="day" aria="none" class="form-label reg" required v-model="day">
       <label for="month" class="form-label regLabel">Mes:</label>
-      <input type="number" id="month" aria="none" class="form-label reg" v-model="month">
+      <input type="number" id="month" aria="none" class="form-label reg"  required v-model="month">
       <label for="year" class="form-label regLabel">Año:</label>
-      <input type="number" id="year" aria="none" class="form-label regYear" v-model="year">
+      <input type="number" id="year" aria="none" class="form-label regYear" required v-model="year">
   </div>
   <button type="submit" class="btn btn-primary" >Mandar información</button>
     <p class="message"><span v-if="message">{{ message }}</span></p>
