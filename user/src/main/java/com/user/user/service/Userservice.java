@@ -29,9 +29,7 @@ public class Userservice {
             Response response=new Response("Fields are empty");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
-        user.setDate(LocalDate.now());
-        user.setName(user.getName());
-        user.setBirth(user.getBirth());
+         user.setDate(LocalDate.now());
         User saved=userDAO.save(user);
         return ResponseEntity.ok(saved);
     }
@@ -83,8 +81,7 @@ public class Userservice {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             
         }
-    }
 
-    
+    }    
 
 }

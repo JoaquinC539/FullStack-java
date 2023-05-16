@@ -20,7 +20,6 @@ export default{
   },
   methods:{
     submitForm(){
-        console.log(this.api);
       const data={
         name:this.name,
         birth:`${this.day}/${this.month}/${this.year}`
@@ -29,7 +28,6 @@ export default{
       axios.post(this.api,JSON.stringify(data),{headers})
       .then((response)=>{
         this.error="";
-        console.log(response);
         if(response.data.body.error){
             this.error="Usuario no registrado";
         }else{this.message="Usuario registrado"};}
@@ -47,7 +45,7 @@ export default{
 </script>
 
 <template>
-<form  v-on:submit.prevent="submitForm()">
+<form  v-on:submit.prevent="submitForm(e)">
   <div class="mb-3 container" >
     <div class="header">
       <label for="name" class="form-label name">Nombre: </label>
