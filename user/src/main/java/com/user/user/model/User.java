@@ -2,6 +2,7 @@ package com.user.user.model;
 
 import java.time.LocalDate;
 
+import com.user.user.interfaces.Results;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +13,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="users")
-public class User {
+public class User implements Results{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false )
@@ -40,6 +41,12 @@ public class User {
         this.id=id;
         this.name=name;
         this.birth=birth;
+    }
+    public User(Long id,String name,String birth,LocalDate date){
+        this.id=id;
+        this.name=name;
+        this.birth=birth;
+        this.date=date;
     }
     public Long getId() {
         return id;

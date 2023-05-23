@@ -3,10 +3,10 @@ package com.user.user.controller;
 import java.util.List;
 
 import javax.naming.NameNotFoundException;
-import javax.print.attribute.standard.Media;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.user.user.model.Response;
 import com.user.user.model.User;
@@ -35,21 +36,21 @@ public class controller {
     private Userservice userService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createUser(@RequestBody User user){
-        ResponseEntity<?> newUser=userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    public ResponseEntity<Object> createUser(@RequestBody User user){
+        Response newUser=userService.createUser(user);
+        return ResponseEntity.status(newUser.getStatus()).body(newUser.getBody());
     }
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<?> createUser(@RequestParam String name, @RequestParam String birth){
+    public ResponseEntity<Object> createUser(@RequestParam String name, @RequestParam String birth){
         User user=new User(name, birth);
-        ResponseEntity<?> newUser=userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        Response newUser=userService.createUser(user);
+        return ResponseEntity.status(newUser.getStatus()).body(newUser.getBody());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) throws NameNotFoundException{
-        ResponseEntity<?> responseEntity=userService.getUserById(id);
-        return responseEntity;
+    public ResponseEntity<Object> getUserById(@PathVariable Long id) throws NameNotFoundException{
+        Response response=userService.getUserById(id);
+        return ResponseEntity.status(response.getStatus()).body(response.getBody());
     }
 
     @GetMapping
@@ -59,12 +60,14 @@ public class controller {
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User updatedUser) throws NameNotFoundException{
-        ResponseEntity<?> user=userService.updateUser(id, updatedUser);
-        return ResponseEntity.ok(user);
+        Response user=userService.updateUser(id, updatedUser);
+        return ResponseEntity.status(user.getStatus()).body(user.getBody());
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserById(@PathVariable Long id) throws NameNotFoundException{
-        ResponseEntity<?> response=userService.deleteUser(id);
-        return ResponseEntity.ok(response);
-    } 
+        Response response=userService.deleteUser(id);
+        return ResponseEntity.status(response.getStatus()).body(response.getBody());
+    }
+
+
 }

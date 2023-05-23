@@ -1,16 +1,23 @@
 package com.user.user.model;
 
-public class Response {
+import org.springframework.http.HttpStatus;
 
-    private String error;
-    public Response(){}
-    public Response(String error){
-        this.error=error;
+public class Response {
+    private Object body;
+    private HttpStatus status;
+
+    public Response(Object body, HttpStatus status){
+        this.body=body;
+        this.status=status;
     }
-    public void setError(String error){
-        this.error=error;
+    public Object getBody(){
+        return this.body;
     }
-    public String getError(){
-        return this.error;
+    public HttpStatus getStatus(){
+        return this.status;
+    }
+    @Override
+    public String toString(){
+        return "{Object:"+this.body+", status:"+this.status;
     }
 }

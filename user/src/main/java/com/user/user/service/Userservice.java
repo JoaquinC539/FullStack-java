@@ -5,12 +5,15 @@ import java.util.Optional;
 
 import javax.naming.NameNotFoundException;
 
+import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.user.user.dao.UserDAO;
+import com.user.user.interfaces.Results;
+import com.user.user.model.Error;
 import com.user.user.model.Response;
 import com.user.user.model.User;
 
@@ -20,28 +23,30 @@ public class Userservice {
     @Autowired
     private UserDAO userDAO;
 
-    public ResponseEntity<?> createUser(User user){
+    public Response createUser(User user){
         if(user.getName()==null || user.getBirth()==null){
-            Response response=new Response("Fields are missing");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            Results error = new Error("Fields are missing");
+            return new Response(error, HttpStatus.BAD_REQUEST);
         }
         if(user.getName().isEmpty() || user.getBirth().isEmpty()  ){
-            Response response=new Response("Fields are empty");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            Results error = new Error("Field/s are empty");
+            
+            System.out.println(error);
+            return new Response(error, HttpStatus.BAD_REQUEST);
         }
-         user.setDate(LocalDate.now());
-        User saved=userDAO.save(user);
-        return ResponseEntity.ok(saved);
+        user.setDate(LocalDate.now());
+        Results userSaved=userDAO.save(user);
+        return new Response(userSaved, HttpStatus.OK);
     }
     
-    public ResponseEntity<?> getUserById(Long id) throws NameNotFoundException{
+    public Response getUserById(Long id) throws NameNotFoundException{
         Optional<User> optionalUser=userDAO.findById(id);
         if(optionalUser.isPresent()){
             User user=optionalUser.get();
-            return ResponseEntity.ok(user);
+            return new Response(user, HttpStatus.OK);
         }else{
-            Response response=new Response("User not found");
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            Error response=new Error("User not found");
+           return new Response(response, HttpStatus.NOT_FOUND);
         }
         
     }
@@ -50,24 +55,24 @@ public class Userservice {
         return userDAO.findAll();
     }
 
-    public ResponseEntity<?> deleteUser(Long id) throws NameNotFoundException{
+    public Response deleteUser(Long id) throws NameNotFoundException{
         if(userDAO.existsById(id)){
             userDAO.deleteById(id);
-            return ResponseEntity.ok("User Deleted");
+            return new Response(new com.user.user.model.Message("User deleted"),HttpStatus.OK);
         }else{
-            Response response=new Response("User not found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            Error response=new Error("User not found");
+            return new Response(response, HttpStatus.NOT_FOUND);
         }
     }
 
-    public ResponseEntity<?> updateUser(Long id,User updatedUser) throws NameNotFoundException{
+    public Response updateUser(Long id,User updatedUser) throws NameNotFoundException{
         if(updatedUser.getName()==null || updatedUser.getBirth()==null){
-            Response response=new Response("Fields are missing");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            Error response=new Error("Fields are missing");
+            return new Response(response, HttpStatus.BAD_REQUEST);
         }
         if(updatedUser.getName().isEmpty() || updatedUser.getBirth().isEmpty()  ){
-            Response response=new Response("Fields are empty");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            Error response=new Error("Fields are empty");
+            return new Response(response, HttpStatus.valueOf(400));
         }
         Optional<User> optionalUser= userDAO.findById(id);
         if(optionalUser.isPresent()){
@@ -75,13 +80,15 @@ public class Userservice {
             user.setName(updatedUser.getName());
             user.setBirth(updatedUser.getBirth());
             User userSaved=userDAO.save(user);
-            return ResponseEntity.ok(userSaved);
+            return new Response(userSaved, HttpStatus.OK);
         }else{
-            Response response=new Response("User not found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            
+            Error response=new Error("User not found");
+            return new Response(response, HttpStatus.NOT_FOUND);            
         }
+    }
 
-    }    
+
+
+
 
 }
