@@ -5,10 +5,8 @@ import java.util.Optional;
 
 import javax.naming.NameNotFoundException;
 
-import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.user.user.dao.UserDAO;
@@ -36,6 +34,7 @@ public class Userservice {
         }
         user.setDate(LocalDate.now());
         Results userSaved=userDAO.save(user);
+        System.out.println(userSaved);
         return new Response(userSaved, HttpStatus.OK);
     }
     
@@ -52,7 +51,8 @@ public class Userservice {
     }
 
     public List<User> getAllUsers(){
-        return userDAO.findAll();
+        List<User> users=userDAO.findAll();
+        return users;
     }
 
     public Response deleteUser(Long id) throws NameNotFoundException{

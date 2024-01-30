@@ -35,17 +35,17 @@ public class controller {
     @Autowired
     private Userservice userService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity<Object> createUser(@RequestBody User user){
         Response newUser=userService.createUser(user);
         return ResponseEntity.status(newUser.getStatus()).body(newUser.getBody());
     }
-    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<Object> createUser(@RequestParam String name, @RequestParam String birth){
-        User user=new User(name, birth);
-        Response newUser=userService.createUser(user);
-        return ResponseEntity.status(newUser.getStatus()).body(newUser.getBody());
-    }
+    // @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    // public ResponseEntity<Object> createUser(@RequestParam String name, @RequestParam String birth){
+    //     User user=new User(name, birth);
+    //     Response newUser=userService.createUser(user);
+    //     return ResponseEntity.status(newUser.getStatus()).body(newUser.getBody());
+    // }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUserById(@PathVariable Long id) throws NameNotFoundException{
